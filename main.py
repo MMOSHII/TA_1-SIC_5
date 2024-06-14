@@ -2,15 +2,16 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/api/sound', methods=['POST'])
-def sound_data():
-    data = request.json
-    if 'sound_level' in data:
-        sound_level = data['sound_level']
-        print(f"Received sound level: {sound_level}")
-        return jsonify({"status": "success", "sound_level": sound_level}), 200
-    else:
-        return jsonify({"status": "error", "message": "Invalid data"}), 400
+@app.route('/temperature', methods=['POST'])
+def temperature():
+    data = request.get_json()
+    if not data or 'temperature' not in data:
+        return jsonify({'error': 'Bad request'}), 400
+    
+    temperature = data['temperature']
+    print(f"Received temperature: {temperature}")
+
+    return jsonify({'message': 'Temperature data received successfully'}), 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5000)
